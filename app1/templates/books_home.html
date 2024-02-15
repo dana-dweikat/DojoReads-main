@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Books Home </title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../static/button.css">
+
+
+
+
+    <!-- navbar -->
+</head>
+<body>
+ 
+<div class="container text-left mt-6">
+
+ <nav class="navbar navbar-expand-lg bg-body-tertiary">
+     <div class="container-fluid">
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                 <li class="nav-item">
+                     <a class="nav-link active" aria-current="page" href="{% url 'app1:books_home'%}">Welcome , {{user.first_name}} !</a>
+                 </li>
+             </ul>
+             <ul style="list-style: none;" class="ms-auto d-flex gap-3 m-0">
+                 
+                                     <li class="nav-item ">
+                                         <a style="text-decoration: underline;" class="nav-link active text-primary" aria-current="page"href="{% url 'app1:books_add'%}">Add Book and Review</a>
+                                     </li>
+                                     <li class="nav-item ">
+                                         <a style="text-decoration: underline;" class=" nav-link active text-primary" aria-current="page"  href="{% url 'app1:logout' %}">Log out</a>
+                                     </li>
+
+             </ul>
+        
+       </div>
+     </div>
+   </nav>
+  
+    <!-- the body -->
+    <div class="row mt-5">
+        <div class="col-6">
+
+
+    <h3 >Recent Book Reviews: </h4>
+        <div class="rece">
+    {% for review in reviews %}
+        <h5><a href="{% url 'app1:books_num' pk=review.book.id %}">{{review.book.title}}</a></h5>
+        <!-- <p>Rating: {{review.book.stars}}</p> -->
+        <p>Rating: 
+            {% for i in "x"|ljust:review.stars %}
+                <i class="fa-solid fa-star"></i>
+            {% endfor %}
+            
+            {% for i in "x"|ljust:review.get_blank_stars_count %}
+                <i class="fa-regular fa-star"></i>
+            {% endfor %}
+          </p>
+        <br>
+    {% endfor %}
+</div>
+</div>
+
+<!-- right side  -->
+<div class="col-6"> 
+<h4>Other Books with Reviews :</h4>
+<div class="scrol">
+{% for book in books %}
+    <p><a style="text-decoration: underline;" href="{% url 'app1:books_num' pk=book.id %}">{{book.title}}</a></p>
+{% endfor %}
+</div>
+
+
+</div>
+</div>
+</div>
+<script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Add Books  and a Review : </title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="../static/button.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+
+
+    <!-- navbar -->
+</head>
+<body>
+ 
+<div class="container text-left mt-6">
+ <nav class="navbar navbar-expand-lg bg-body-tertiary">
+     <div class="container-fluid">
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+             
+             <ul style="list-style: none;" class="ms-auto d-flex gap-3 m-0">
+                 
+                                     <li class="nav-item ">
+                                         <a style="text-decoration: underline;" class="nav-link active text-primary " aria-current="page"href="{% url 'app1:books_home'%}">Home </a>
+                                     </li>
+                                     <li class="nav-item ">
+                                         <a style="text-decoration: underline;" class=" nav-link active text-primary" aria-current="page"  href="{% url 'app1:logout' %}">Log out</a>
+                                     </li>
+
+             </ul>
+        
+       </div>
+     </div>
+   </nav>
+   <br>
+
+
+    <!-- the body -->
+    
+    <h3 class="pt-3">{{book.title}}</h3>
+    <h3>Author: {{book.author.name}}</h3>
+    
+   
+
+    <div class="row mt-5">
+        <div class="col-6  me-5">
+    <h4>Reviews</h4>
+    <hr>
+    {% for r in reviews %}
+    <p>Rating: 
+        {% for i in "x"|ljust:r.stars %}
+            <i class="fa-solid fa-star"></i>
+        {% endfor %}
+        
+        {% for i in "x"|ljust:r.get_blank_stars_count %}
+            <i class="fa-regular fa-star"></i>
+        {% endfor %}
+      </p>        <p><a href="{% url 'app1:users_num' pk=r.user.id %}">{{r.user.first_name}}</a>   says: {{r.review}}</p>
+        <p>{{r.created_at}}</p>
+        {% if user == r.user %}
+            <a style="text-decoration: underline;" class="text-primary" href="{% url 'app1:delete_review' pk=r.id %}">Delete this Review</a>
+        {% endif %}
+        <hr>
+    {% endfor %}
+    </div>
+
+<!--right side  -->
+   <div class="col-4 ms-5">
+
+<h4>Add a Review :</h4>
+<form action="{% url 'app1:add_review' %}" method="POST">
+    {% csrf_token %}
+
+    <!-- Review Input > type :"textarea" -->
+    <div class="form-group">
+        <textarea class="form-control border-2 border-black" name="review" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+
+<br>
+    <input type="hidden" name="book" value="{{book.id}}">
+    <h4>Rating: </h4>
+    <select class="form-select border-2 border-black" aria-label="Default select example" style="width: max-content;" name="stars">
+        <option value="1">1 star</option>
+        <option value="2">2 stars </option>
+        <option value="3">3 stars</option>
+        <option value="4">4 stars</option>
+        <option value="5">5 stars</option>
+    </select>
+        <br>
+
+
+
+      <div class="submit-btn d-flex justify-content-end">
+          <button style="width: fit-content;
+      box-shadow: 2px 3px 0px 1px rgba(0, 0, 0, 1)
+      , 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+      border: 2px solid black;" type="submit" class="btn btn-outline-dark btn-shadow mt-3"> Submit Review</button>
+      </div>
+</form>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
